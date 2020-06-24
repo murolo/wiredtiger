@@ -317,6 +317,10 @@ __wt_cache_stats_update(WT_SESSION_IMPL *session)
     WT_STAT_SET(session, stats, cache_bytes_updates, __wt_cache_bytes_updates(cache));
 
     WT_STAT_SET(session, stats, cache_eviction_maximum_page_size, cache->evict_max_page_size);
+    WT_STAT_SET(session, stats, cache_eviction_average_page_size, cache->evict_avg_page_size);
+    WT_STAT_SET(
+      session, stats, cache_eviction_average_page_size_count, cache->evict_avg_page_size_count);
+    WT_STAT_SET(session, stats, cache_eviction_average_page_size_sum, cache->evict_avg_page_size_sum);
     WT_STAT_SET(
       session, stats, cache_pages_dirty, cache->pages_dirty_intl + cache->pages_dirty_leaf);
 

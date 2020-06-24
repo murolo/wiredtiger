@@ -874,7 +874,11 @@ static const char *const __stats_connection_desc[] = {
   "cache: tracked bytes belonging to internal pages in the cache",
   "cache: tracked bytes belonging to leaf pages in the cache",
   "cache: tracked dirty bytes in the cache", "cache: tracked dirty pages in the cache",
-  "cache: unmodified pages evicted", "capacity: background fsync file handles considered",
+  "cache: unmodified pages evicted", "cache: xx avg page size at eviction",
+  "cache: xx count for avg page size at eviction", "cache: xx point a", "cache: xx point b",
+  "cache: xx point c", "cache: xx point d", "cache: xx point e", "cache: xx point f",
+  "cache: xx point forced", "cache: xx sum for avg page size at eviction",
+  "capacity: background fsync file handles considered",
   "capacity: background fsync file handles synced", "capacity: background fsync time (msecs)",
   "capacity: bytes read", "capacity: bytes written for checkpoint",
   "capacity: bytes written for eviction", "capacity: bytes written for log",
@@ -1297,6 +1301,16 @@ __wt_stat_connection_clear_single(WT_CONNECTION_STATS *stats)
     /* not clearing cache_bytes_dirty */
     /* not clearing cache_pages_dirty */
     stats->cache_eviction_clean = 0;
+    /* not clearing cache_eviction_average_page_size */
+    /* not clearing cache_eviction_average_page_size_count */
+    /* not clearing cache_eviction_point_a */
+    /* not clearing cache_eviction_point_b */
+    /* not clearing cache_eviction_point_c */
+    /* not clearing cache_eviction_point_d */
+    /* not clearing cache_eviction_point_e */
+    /* not clearing cache_eviction_point_f */
+    /* not clearing cache_eviction_point_forced */
+    /* not clearing cache_eviction_average_page_size_sum */
     stats->fsync_all_fh_total = 0;
     stats->fsync_all_fh = 0;
     /* not clearing fsync_all_time */
@@ -1798,6 +1812,18 @@ __wt_stat_connection_aggregate(WT_CONNECTION_STATS **from, WT_CONNECTION_STATS *
     to->cache_bytes_dirty += WT_STAT_READ(from, cache_bytes_dirty);
     to->cache_pages_dirty += WT_STAT_READ(from, cache_pages_dirty);
     to->cache_eviction_clean += WT_STAT_READ(from, cache_eviction_clean);
+    to->cache_eviction_average_page_size += WT_STAT_READ(from, cache_eviction_average_page_size);
+    to->cache_eviction_average_page_size_count +=
+      WT_STAT_READ(from, cache_eviction_average_page_size_count);
+    to->cache_eviction_point_a += WT_STAT_READ(from, cache_eviction_point_a);
+    to->cache_eviction_point_b += WT_STAT_READ(from, cache_eviction_point_b);
+    to->cache_eviction_point_c += WT_STAT_READ(from, cache_eviction_point_c);
+    to->cache_eviction_point_d += WT_STAT_READ(from, cache_eviction_point_d);
+    to->cache_eviction_point_e += WT_STAT_READ(from, cache_eviction_point_e);
+    to->cache_eviction_point_f += WT_STAT_READ(from, cache_eviction_point_f);
+    to->cache_eviction_point_forced += WT_STAT_READ(from, cache_eviction_point_forced);
+    to->cache_eviction_average_page_size_sum +=
+      WT_STAT_READ(from, cache_eviction_average_page_size_sum);
     to->fsync_all_fh_total += WT_STAT_READ(from, fsync_all_fh_total);
     to->fsync_all_fh += WT_STAT_READ(from, fsync_all_fh);
     to->fsync_all_time += WT_STAT_READ(from, fsync_all_time);

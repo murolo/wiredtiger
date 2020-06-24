@@ -91,8 +91,11 @@ struct __wt_cache {
     uint64_t app_waits;  /* User threads waited for cache */
     uint64_t app_evicts; /* Pages evicted by user threads */
 
-    uint64_t evict_max_page_size; /* Largest page seen at eviction */
-    struct timespec stuck_time;   /* Stuck time */
+    uint64_t evict_max_page_size;       /* Largest page seen at eviction */
+    uint64_t evict_avg_page_size;       /* Largest page seen at eviction */
+    uint64_t evict_avg_page_size_sum;   /* Largest page seen at eviction */
+    uint64_t evict_avg_page_size_count; /* Largest page seen at eviction */
+    struct timespec stuck_time;         /* Stuck time */
 
     /*
      * Read information.

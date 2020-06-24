@@ -33,6 +33,8 @@ __evict_force_check(WT_SESSION_IMPL *session, WT_REF *ref)
     if (__wt_page_evict_clean(page))
         return (false);
 
+    WT_STAT_CONN_INCR(session, cache_eviction_point_a);
+
     /*
      * Exclude the disk image size from the footprint checks.  Usually the
      * disk image size is small compared with the in-memory limit (e.g.
@@ -49,18 +51,22 @@ __evict_force_check(WT_SESSION_IMPL *session, WT_REF *ref)
     if (footprint < btree->splitmempage)
         return (false);
 
+    WT_STAT_CONN_INCR(session, cache_eviction_point_b);
     /*
      * If this session has more than one hazard pointer, eviction will fail and there is no point
      * trying.
      */
     if (__wt_hazard_count(session, ref) > 1)
         return (false);
+    WT_STAT_CONN_INCR(session, cache_eviction_point_c);
 
     /* If we can do an in-memory split, do it. */
     if (__wt_leaf_page_can_split(session, page))
         return (true);
+    WT_STAT_CONN_INCR(session, cache_eviction_point_d);
     if (footprint < btree->maxmempage)
         return (false);
+    WT_STAT_CONN_INCR(session, cache_eviction_point_e);
 
     /* Bump the oldest ID, we're about to do some visibility checks. */
     WT_IGNORE_RET(__wt_txn_update_oldest(session, 0));
@@ -75,6 +81,7 @@ __evict_force_check(WT_SESSION_IMPL *session, WT_REF *ref)
 
     /* Trigger eviction on the next page release. */
     __wt_page_evict_soon(session, ref);
+    WT_STAT_CONN_INCR(session, cache_eviction_point_f);
 
     /* If eviction cannot succeed, don't try. */
     return (__wt_page_can_evict(session, ref, NULL));
@@ -341,6 +348,7 @@ read:
              */
             if (force_attempts < 10 && __evict_force_check(session, ref)) {
                 ++force_attempts;
+                WT_STAT_CONN_INCR(session, cache_eviction_point_forced);
                 ret = __wt_page_release_evict(session, ref, 0);
                 /*
                  * If forced eviction succeeded, don't retry. If it failed, stall.

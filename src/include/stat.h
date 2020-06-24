@@ -451,6 +451,16 @@ struct __wt_connection_stats {
     int64_t cache_bytes_dirty;
     int64_t cache_pages_dirty;
     int64_t cache_eviction_clean;
+    int64_t cache_eviction_average_page_size;
+    int64_t cache_eviction_average_page_size_count;
+    int64_t cache_eviction_point_a;
+    int64_t cache_eviction_point_b;
+    int64_t cache_eviction_point_c;
+    int64_t cache_eviction_point_d;
+    int64_t cache_eviction_point_e;
+    int64_t cache_eviction_point_f;
+    int64_t cache_eviction_point_forced;
+    int64_t cache_eviction_average_page_size_sum;
     int64_t fsync_all_fh_total;
     int64_t fsync_all_fh;
     int64_t fsync_all_time;

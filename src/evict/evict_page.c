@@ -206,6 +206,11 @@ __wt_evict(WT_SESSION_IMPL *session, WT_REF *ref, uint8_t previous_state, uint32
     if (page->memory_footprint > conn->cache->evict_max_page_size)
         conn->cache->evict_max_page_size = page->memory_footprint;
 
+    conn->cache->evict_avg_page_size_count++;
+    conn->cache->evict_avg_page_size_sum += page->memory_footprint;
+    conn->cache->evict_avg_page_size =
+      conn->cache->evict_avg_page_size_sum / conn->cache->evict_avg_page_size_count;
+
     /* Figure out whether reconciliation was done on the page */
     clean_page = __wt_page_evict_clean(page);
 
